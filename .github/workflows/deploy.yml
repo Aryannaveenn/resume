@@ -1,0 +1,48 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; a newer push cancels an older in-flight one.
+concurrency:
+  group: deploy-ec2
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      APP_DIR: ${{ vars.EC2_APP_DIR || '/var/www/resume' }}
+    steps:
+      - name: Set up SSH key
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/ec2_key
+          chmod 600 ~/.ssh/ec2_key
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Pull latest code on EC2
+        env:
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          ssh -i ~/.ssh/ec2_key -o BatchMode=yes "$USER@$HOST" \
+            "APP_DIR='$APP_DIR' BRANCH='$BRANCH' bash -s" <<'EOF'
+          set -euo pipefail
+          cd "$APP_DIR"
+          git fetch --prune origin "$BRANCH"
+          # Match the remote exactly so a stray edit on the server can't block the deploy.
+          git reset --hard "origin/$BRANCH"
+          echo "Deployed $(git rev-parse --short HEAD) to $APP_DIR"
+          EOF
+
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/ec2_key
