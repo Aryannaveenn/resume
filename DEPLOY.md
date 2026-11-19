@@ -30,8 +30,8 @@ Commands marked **(laptop)** run on your Mac. Commands marked **(server)** run o
 
 1. In the AWS console, open **EC2 → Launch instance**.
    - **Name:** `resume-site`
-   - **AMI:** Ubuntu Server 24.04 LTS
-   - **Instance type:** `t2.micro` or `t3.micro` (free tier eligible)
+   - **AMI:** Ubuntu Server 26.04 LTS (64-bit x86). The default login user is `ubuntu`.
+   - **Instance type:** `t3.micro`. Its 2 vCPUs and 1 GB of RAM are plenty for Nginx serving a static site.
    - **Key pair:** create one called `resume-ec2`, type ED25519, format `.pem`. It downloads to your Mac. Keep it safe.
    - **Network settings → Create security group** with these inbound rules:
      | Type  | Port | Source    |

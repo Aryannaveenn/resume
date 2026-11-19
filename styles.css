@@ -172,6 +172,7 @@ a:hover { color: var(--accent); }
 
 /* ---------- Hero ---------- */
 .hero {
+  overflow-x: clip;
   padding-top: clamp(2.5rem, 2rem + 4vw, 5rem);
   padding-bottom: clamp(3rem, 2rem + 4vw, 5rem);
 }
@@ -203,9 +204,14 @@ a:hover { color: var(--accent); }
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+/* Phones: sit in from the edge so the outstretched handshake stays on screen */
+@media (max-width: 720px) {
+  .greeter { right: 10vw; }
+}
 .greeter__svg {
   display: block;
-  width: 100%;
+  /* extra room on the right for the outstretched handshake (the torso mask clips at the box edge) */
+  width: 140%;
   height: auto;
   overflow: visible;
   /* fade the torso out instead of ending on a hard edge */
@@ -257,17 +263,35 @@ a:hover { color: var(--accent); }
   font-weight: 700;
   white-space: nowrap;
   opacity: 0;
-  transform: translate(-50%, 0) scale(0.6);
+  translate: -50% 0;
+  scale: 0.6;
   transform-origin: 100% 100%;
   pointer-events: none;
 }
+/* Handshake bubble sits above the head on the side the hand reaches out to */
+.greeter__bubble--shake {
+  left: auto;
+  right: 0;
+  translate: 0 -20%;
+  border-radius: 1em 1em 1em 0.2em;
+  transform-origin: 0 100%;
+}
+
+/* Only the open hand shows until a handshake swaps it */
+.greeter__hand-shake { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   .js .greeter { animation: greeter-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s both; }
   .greeter__eyes { animation: blink 5.5s infinite 2.5s; }
   .greeter.is-waving .greeter__arm { animation: wave 1.8s ease-in-out; }
   .greeter.is-waving .greeter__head { animation: tilt 1.8s ease-in-out; }
-  .greeter.is-waving .greeter__bubble { animation: bubble 2.8s ease both; }
+  .greeter.is-waving .greeter__bubble--wave { animation: bubble 2.8s ease both; }
+
+  .greeter.is-shaking .greeter__arm { animation: shake 2.8s ease-in-out; }
+  .greeter.is-shaking .greeter__head { animation: tilt 2.8s ease-in-out; }
+  .greeter.is-shaking .greeter__hand-open { animation: hand-swap-out 2.8s linear; }
+  .greeter.is-shaking .greeter__hand-shake { animation: hand-swap-in 2.8s linear; }
+  .greeter.is-shaking .greeter__bubble--shake { animation: bubble 3.2s ease both; }
 }
 
 @keyframes greeter-in {
@@ -288,9 +312,30 @@ a:hover { color: var(--accent); }
   97% { transform: scaleY(0.1); }
 }
 @keyframes bubble {
-  0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
-  12%, 82% { opacity: 1; transform: translate(-50%, -10%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -10%) scale(1); }
+  0% { opacity: 0; scale: 0.6; transform: none; }
+  12%, 82% { opacity: 1; scale: 1; transform: translateY(-10%); }
+  100% { opacity: 0; scale: 1; transform: translateY(-10%); }
+}
+/* Reach out to the side, pump twice, hold, then return to the resting pose */
+@keyframes shake {
+  0% { transform: rotate(-4deg); }
+  22% { transform: rotate(80deg); }
+  32% { transform: rotate(71deg); }
+  42% { transform: rotate(86deg); }
+  52% { transform: rotate(71deg); }
+  62% { transform: rotate(84deg); }
+  70%, 80% { transform: rotate(80deg); }
+  100% { transform: rotate(-4deg); }
+}
+@keyframes hand-swap-out {
+  0%, 15% { opacity: 1; }
+  16%, 84% { opacity: 0; }
+  85%, 100% { opacity: 1; }
+}
+@keyframes hand-swap-in {
+  0%, 15% { opacity: 0; }
+  16%, 84% { opacity: 1; }
+  85%, 100% { opacity: 0; }
 }
 
 .hero__line { display: block; overflow: hidden; padding-bottom: 0.06em; }

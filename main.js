@@ -19,22 +19,32 @@ document.documentElement.classList.add("js");
   setInterval(tick, 15000);
 })();
 
-// Person waves when someone arrives, and again on hover or tap
-(function waveGreeter() {
-  const bot = document.querySelector(".greeter");
-  if (!bot) return;
-  const wave = () => {
-    if (bot.classList.contains("is-waving")) return;
-    bot.classList.add("is-waving");
+// Person offers a handshake when the page loads (or reloads), and waves on hover or tap
+(function greet() {
+  const person = document.querySelector(".greeter");
+  if (!person) return;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const busy = () =>
+    person.classList.contains("is-waving") || person.classList.contains("is-shaking");
+  const play = (cls) => {
+    if (!busy()) person.classList.add(cls);
   };
-  bot.addEventListener("animationend", (e) => {
-    if (e.animationName === "bubble") bot.classList.remove("is-waving");
+
+  // the speech bubble is the longest part of each gesture, so its end resets the pose
+  person.addEventListener("animationend", (e) => {
+    if (e.animationName === "bubble") person.classList.remove("is-waving", "is-shaking");
   });
-  bot.addEventListener("mouseenter", wave);
-  bot.addEventListener("click", wave);
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    setTimeout(wave, 1150);
-  }
+  person.addEventListener("mouseenter", () => play("is-waving"));
+  person.addEventListener("click", () => play("is-waving"));
+
+  if (reduceMotion) return;
+  setTimeout(() => play("is-shaking"), 1150);
+  // back/forward navigation restores the page from cache without a fresh load
+  window.addEventListener("pageshow", (e) => {
+    if (!e.persisted) return;
+    person.classList.remove("is-waving", "is-shaking");
+    setTimeout(() => play("is-shaking"), 300);
+  });
 })();
 
 // Eyes follow the cursor (or a finger on touch screens)
