@@ -500,6 +500,19 @@ a:hover { color: var(--accent); }
   color: var(--muted);
   max-width: 36ch;
 }
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-top: 1.5rem;
+}
+.project__note {
+  font-size: var(--step--1);
+  color: var(--muted);
+  max-width: 24ch;
+  line-height: 1.4;
+}
 .stack span {
   display: block;
   color: var(--ink);
@@ -736,6 +749,10 @@ a:hover { color: var(--accent); }
   .project__body { grid-template-columns: 1fr; gap: 3pt; }
   .project__summary { font-size: 9.5pt; max-width: none; }
   .stack { margin-top: 2pt; max-width: none; }
+  .project__links { margin-top: 2pt; }
+  .project__note { display: none; }
+  .project__demo { padding: 0; border: 0; border-radius: 0; font-size: 9pt; font-weight: 600; }
+  .project__demo::after { content: ": " attr(href); font-weight: 400; color: var(--muted); }
   .stack span { display: inline; margin-right: 4pt; }
   .project__detail h4 { margin-bottom: 2pt; }
   .project__detail ul + h4 { margin-top: 4pt; }
