@@ -580,6 +580,20 @@ a:hover { color: var(--accent); }
   .project__body { grid-template-columns: 1fr; }
 }
 
+/* Alternate sides: every second project mirrors (name and summary on the right).
+   Wide screens only; phones stack into one column. */
+@media (min-width: 821px) {
+  /* the head uses the same columns as the body, so the name lines up with the summary below it */
+  .project:nth-of-type(even) .project__head,
+  .project:nth-of-type(even) .project__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    column-gap: clamp(1.5rem, 5vw, 4.5rem);
+  }
+  .project:nth-of-type(even) .project__head h3,
+  .project:nth-of-type(even) .project__intro { order: 2; }
+}
+
 /* ---------- Experience timeline ---------- */
 .timeline { list-style: none; }
 

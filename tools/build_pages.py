@@ -21,13 +21,14 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://aryannaveen.com"
 OG_IMAGE = f"{SITE}/og-image.png"
 GITHUB = "https://github.com/Aryannaveenn"
+LINKEDIN = "https://www.linkedin.com/in/aryan-naveen-22b4a2272/"
 
 # Section id -> page settings. Order is the order of the nav and sitemap.
 PAGES = {
     "projects": {
         "name": "Projects",
         "title": "Projects | Aryan Naveen, Software Engineer",
-        "description": "Client projects by Aryan Naveen: an NFC restaurant time clock, the BizComm loyalty platform with an AI analytics panel, and a cloud consultancy website.",
+        "description": "Projects by Aryan Naveen: an NFC restaurant time clock, the BizComm loyalty platform, BasketWise (Best Project at UNSW DevSoc) and a cloud consultancy website.",
     },
     "experience": {
         "name": "Experience",
@@ -150,7 +151,7 @@ def page_schema(slug: str, cfg: dict) -> dict:
                 "description": cfg["description"],
                 "inLanguage": "en-AU",
                 "isPartOf": {"@type": "WebSite", "@id": f"{SITE}/#website", "url": f"{SITE}/", "name": "Aryan Naveen"},
-                "about": {"@type": "Person", "@id": f"{SITE}/#person", "name": "Aryan Naveen", "url": f"{SITE}/", "sameAs": [GITHUB]},
+                "about": {"@type": "Person", "@id": f"{SITE}/#person", "name": "Aryan Naveen", "url": f"{SITE}/", "sameAs": [LINKEDIN, GITHUB]},
                 "breadcrumb": {"@id": f"{url}#breadcrumb"},
             },
             {
