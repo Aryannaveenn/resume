@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /deploy/
+Disallow: /tools/
+
+Sitemap: https://aryannaveen.com/sitemap.xml
