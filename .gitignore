@@ -1,0 +1,19 @@
+# Keys and credentials: never commit these
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local logs and scratch files
+*.log
+node_modules/
